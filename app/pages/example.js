@@ -7,7 +7,7 @@ import { } from 'antd'
 // @connect((storeState)=>({}))
 
 export default class app extends Component {
-  static defaultProps={
+  static defaultProps = {
   }
 
   static propTypes = {
@@ -18,7 +18,7 @@ export default class app extends Component {
     this.state = {}
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   // region vscode 1.17的收缩代码块功能  业务代码
 

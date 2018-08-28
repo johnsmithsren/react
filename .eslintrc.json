@@ -33,17 +33,6 @@
         "comments": 150
       }
     ],
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
-    "react/jsx-indent": [
-      2,
-      2
-    ],
     "semi": 0,
     "react/sort-comp": 0,
     "react/prop-types": 0,
@@ -111,7 +100,7 @@
       {
         "minProperties": 5,
         "consistent": true,
-        "multiline":true
+        "multiline": true
       }
     ]
   },

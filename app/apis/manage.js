@@ -22,7 +22,6 @@ export const fetchRoleDetail = createApi(`${path}/${prefix}/role/detail`, option
 export const fetchRoleDelete = createApi(`${path}/${prefix}/role/delete`, option) // 删除角色
 export const fetchModuleListInRole = createApi(`${path}/${prefix}/role/resList`, option) // 已选择的模块
 export const fetchUpdateRoleRes = createApi(`${path}/${prefix}/role/updateRes`, option) // 更新已选择的模块
-
 export const fetchRoleDeletePeople = createApi(`${path}/${prefix}/user/removeRole`, option)
 export const fetchUpdateButton = createApi(`${path}/${prefix}/role/updateButton`, option)
 export const fetchTreeList = createApi(`${path}/${prefix}/role/resTree`, option)

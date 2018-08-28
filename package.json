@@ -1,10 +1,10 @@
 {
-  "name": "duxiaodu",
-  "version": "0.0.2",
-  "description": "duxiaodu",
+  "name": "renjm",
+  "version": "0.0.1",
+  "description": "从这位同学的项目中进行的改造工作-----duxiaodu",
   "repository": {
     "type": "git",
-    "url": "https://github.com/duxianwei520/react"
+    "url": "https://github.com/johnsmithsren/react"
   },
   "private": true,
   "scripts": {
@@ -15,12 +15,7 @@
     "mock": "supervisor -w mock ./app/mocks/http.js",
     "chat": "node ./scripts/chatServer.js"
   },
-  "author": "duxiaodu",
-  "contributors": [
-    {
-      "name": "HanQ"
-    }
-  ],
+  "author": "renjm",
   "devDependencies": {
     "babel-core": "~6.26.0",
     "babel-eslint": "~8.2.1",

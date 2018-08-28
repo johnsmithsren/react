@@ -28,6 +28,13 @@ const editor = (location, cb) => {
   }, 'editor')
 }
 
+// 消息中心
+const message = (location, cb) => {
+  require.ensure([], (require) => {
+    cb(null, require('../pages/message/user/index').default)
+  }, 'message')
+}
+
 export default () => (
   <Router history={hashHistory}>
     <Route path="/" component={base.app} onEnter={isLogin}>
@@ -35,13 +42,14 @@ export default () => (
       <Route path="/desk$/index" component={base.example} />
       {/** *菜单 开始 */}
       <Route path="/echarts" getComponent={echarts} />
+      {/** *编辑器 */}
       <Route path="/editor" getComponent={editor} />
-      <Route path="/chat" getComponent={chat} />
+      <Route path="/message" getComponent={message} />
       {/** *菜单 结束 */}
       {/** *系统设置 开始 */}
       <Route path={`/${set}/userManage`} component={sysSet.userManage} />
-      <Route path={`/${set}/roleManage`} component={sysSet.roleManage} />
-      <Route path={`/${set}/moduleManage`} component={sysSet.moduleManage} />
+      {/* <Route path={`/${set}/roleManage`} component={sysSet.roleManage} />
+      <Route path={`/${set}/moduleManage`} component={sysSet.moduleManage} /> */}
       {/** *系统设置 结束 */}
     </Route>
     <Route path="/login" component={base.login} />

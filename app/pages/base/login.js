@@ -20,7 +20,7 @@ const FormItem = Form.Item
   loginResponse: state.loginResponse,
 }))
 @Form.create({
-  onFieldsChange(props, items) {},
+  onFieldsChange(props, items) { },
 })
 
 export default class Login extends Component {
