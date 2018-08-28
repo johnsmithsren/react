@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Spin, notification, Button, Popconfirm, Form, Input, message, Layout } from 'antd'
+import { List, Avatar, Icon,Spin, notification, Button, Popconfirm, Form, Input, message, Layout } from 'antd'
 import TableList from '@tableList'
 import { synUser } from '@apis/common'
 import {
@@ -16,6 +16,25 @@ import {
     fetchRoleList,
     fetchChangeUserStatus,
 } from '@apis/manage'
+
+
+const listData = [];
+for (let i = 0; i < 23; i++) {
+  listData.push({
+    href: 'http://ant.design',
+    title: `ant design part ${i}`,
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+  });
+}
+
+const IconText = ({ type, text }) => (
+    <span>
+      <Icon type={type} style={{ marginRight: 8 }} />
+      {text}
+    </span>
+  );
 import UserList from './list'
 // import AddPolice from './modal/addPolice'
 // import SelectRole from './modal/selectRole'
@@ -63,6 +82,8 @@ export default class app extends Component {
             userRoleSetResult: { list: [], loading: false },
         }
     }
+
+
 
     // 组件即将加载
     componentWillMount() {
@@ -387,7 +408,34 @@ export default class app extends Component {
             <div className="page page-scrollfix page-usermanage">
                 <Layout>
                     <Layout className="page-body">
-                        <Sider width={240} style={{ display: 'flex', flexDirection: 'column' }}>
+                    <List
+    itemLayout="vertical"
+    size="large"
+    pagination={{
+      onChange: (page) => {
+        console.log(page);
+      },
+      pageSize: 3,
+    }}
+    dataSource={listData}
+    footer={<div><b>ant design</b> footer part</div>}
+    renderItem={item => (
+      <List.Item
+        key={item.title}
+        actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
+        extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+      >
+        <List.Item.Meta
+          avatar={<Avatar src={item.avatar} />}
+          title={<a href={item.href}>{item.title}</a>}
+          description={item.description}
+        />
+        {item.content}
+      </List.Item>
+    )}
+  />,
+  mountNode);
+                        {/* <Sider width={240} style={{ display: 'flex', flexDirection: 'column' }}>
                             <Spin spinning={this.state.spinloading}>
                                 <h3 className="page-title">杭州市</h3>
                                 <div className="treeside">
@@ -398,8 +446,8 @@ export default class app extends Component {
                                     />
                                 </div>
                             </Spin>
-                        </Sider>
-                        <Content>
+                        </Sider> */}
+                        {/* <Content>
                             <h3 className="page-title">
                                 {this.state.searchtitle}
                                 <span className="error"> {userListResult.totalCount ? userListResult.totalCount : 0}</span>人
@@ -427,8 +475,8 @@ export default class app extends Component {
                                     onShowSizeChange={this.pageSizeChange}
                                     totalCount={userListResult.totalCount}
                                 />
-                            </div>
-                            <div className="page-footer">
+                            </div> */}
+                            {/* <div className="page-footer">
                                 <div className="page-footer-buttons">
                                     {
                                         btnRights.add ? <Button type="primary" style={{ marginRight: '10px' }} onClick={() => this.policeAdd()}> 新增人员</Button> : null
@@ -438,7 +486,7 @@ export default class app extends Component {
                                     }
                                 </div>
                             </div>
-                        </Content>
+                        </Content> */}
                     </Layout>
                 </Layout>
 

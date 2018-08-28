@@ -2,7 +2,7 @@
 import { hashHistory } from 'react-router'
 import { message } from 'antd'
 import { loginByTicket, staff, nav, login as loginApi, getBtns } from '@apis/common'
-
+const _ = require('lodash');
 export function parseQueryString(url) {
   const obj = {}
   if (url.indexOf('?') !== -1) {
@@ -17,19 +17,15 @@ export function parseQueryString(url) {
 }
 
 /* --------------验证ticket并获取用户信息和菜单信息 --------------*/
-const _fetchLoginByTicket = async ticket => new Promise((resolve) => {
-  loginByTicket({ ticket }, (response) => {
-    resolve(response.data)
-  }, (response) => {
-    const obj = parseQueryString(window.location.href)
-    console.log(obj)
-    if (obj.ticket || obj.mode) {
-      message.info('登录过期或服务不可用')
-    } else {
-      hashHistory.replace('/login')
-    }
-  })
-})
+const _fetchLoginByTicket = async (ticket) => {
+  let info = await loginByTicket({ ticket })
+  const obj = parseQueryString(window.location.href)
+  if (obj.ticket || obj.mode) {
+    message.info('登录过期或服务不可用')
+  } else {
+    hashHistory.replace('/login')
+  }
+}
 
 const _fetchStaff = () => new Promise((resolve) => {
   staff({}, (res) => {
@@ -103,7 +99,7 @@ export const validateTickit = async function validateTickit({ query, pathname },
 /* -------------- 存储当前页面的菜单id到sessionStorage的menuId属性上 --------------*/
 // 比较方法
 function compare(children, pathname) {
-  for (let i = 0; i < children.length; i += 1) {
+  _.forEach(children, c => {
     const item = children[i]
     /* eslint-disable no-useless-escape */
     const _resKey = `${item.resKey.replace(/[\$\.\?\+\^\[\]\(\)\{\}\|\\\/]/g, '\\$&').replace(/\*\*/g, '[\\w|\\W]+').replace(/\*/g, '[^\\/]+')}$`
@@ -114,7 +110,7 @@ function compare(children, pathname) {
     } else if (item.children) {
       if (compare(item.children, pathname)) return true
     }
-  }
+  })
   return false
 }
 
