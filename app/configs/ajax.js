@@ -148,7 +148,7 @@ export const oftenFetchByPost = (api, options) => {
     if (options && (options.baseURL.indexOf('12602') !== -1)) {
       baseConfig.withCredentials = false
     } else {
-      baseConfig.withCredentials = true
+      baseConfig.withCredentials = false
     }
     axios({
       ...baseConfig, ...options, ...config, url: api, data, cancelToken,

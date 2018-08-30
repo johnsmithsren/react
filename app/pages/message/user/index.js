@@ -5,7 +5,7 @@
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { List, Avatar, Icon,Spin, notification, Button, Popconfirm, Form, Input, message, Layout } from 'antd'
+import { List, Avatar, Icon, Spin, notification, Button, Popconfirm, Form, Input, message, Layout } from 'antd'
 import TableList from '@tableList'
 import { synUser } from '@apis/common'
 import {
@@ -20,21 +20,22 @@ import {
 
 const listData = [];
 for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `ant design part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
+    listData.push({
+        href: 'http://ant.design',
+        title: `ant design part ${i}`,
+        name: 'hh',
+        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+        content: 'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
+    });
 }
 
 const IconText = ({ type, text }) => (
     <span>
-      <Icon type={type} style={{ marginRight: 8 }} />
-      {text}
+        <Icon type={type} style={{ marginRight: 8 }} />
+        {text}
     </span>
-  );
+);
 import UserList from './list'
 // import AddPolice from './modal/addPolice'
 // import SelectRole from './modal/selectRole'
@@ -313,6 +314,53 @@ export default class app extends Component {
         this.getData()
     }
 
+    state = {
+        loading: true,
+        loadingMore: false,
+        showLoadingMore: true,
+        data: [],
+    }
+
+    componentDidMount() {
+        this.getData((res) => {
+            this.setState({
+                loading: false,
+                data: res.results,
+            });
+        });
+    }
+
+    // getData = (callback) => {
+    //     reqwest({
+    //         url: fakeDataUrl,
+    //         type: 'json',
+    //         method: 'get',
+    //         contentType: 'application/json',
+    //         success: (res) => {
+    //             callback(res);
+    //         },
+    //     });
+    // }
+
+    onLoadMore = () => {
+        this.setState({
+            loadingMore: true,
+        });
+        this.getData((res) => {
+            const data = this.state.data.concat(res.results);
+            this.setState({
+                data,
+                loadingMore: false,
+            }, () => {
+                // Resetting window's offsetTop so as to display react-virtualized demo underfloor.
+                // In real scene, you can using public method of react-virtualized:
+                // https://stackoverflow.com/questions/46700726/how-to-use-public-method-updateposition-of-react-virtualized
+                window.dispatchEvent(new Event('resize'));
+            });
+        });
+    }
+
+
     // 生成表格头部信息
     renderColumn() {
         return [
@@ -403,38 +451,34 @@ export default class app extends Component {
         const { btnRights } = this.state
         const { getFieldDecorator } = this.props.form
         const thevalue = this.state.moduletype === 'add' ? '' : userDetailResult
-
+        const { loading, loadingMore, showLoadingMore, data } = this.state;
+        const loadMore = showLoadingMore ? (
+            <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
+                {loadingMore && <Spin />}
+                {!loadingMore && <Button onClick={this.onLoadMore}>loading more</Button>}
+            </div>
+        ) : null;
         return (
             <div className="page page-scrollfix page-usermanage">
                 <Layout>
                     <Layout className="page-body">
-                    <List
-    itemLayout="vertical"
-    size="large"
-    pagination={{
-      onChange: (page) => {
-        console.log(page);
-      },
-      pageSize: 3,
-    }}
-    dataSource={listData}
-    footer={<div><b>ant design</b> footer part</div>}
-    renderItem={item => (
-      <List.Item
-        key={item.title}
-        actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
-        extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
-      >
-        <List.Item.Meta
-          avatar={<Avatar src={item.avatar} />}
-          title={<a href={item.href}>{item.title}</a>}
-          description={item.description}
-        />
-        {item.content}
-      </List.Item>
-    )}
-  />,
-  mountNode);
+                        <List
+                            className="demo-loadmore-list"
+                            loading={loading}
+                            itemLayout="horizontal"
+                            loadMore={loadMore}
+                            dataSource={listData}
+                            renderItem={item => (
+                                <List.Item actions={[<a>edit</a>, <a>more</a>]}>
+                                    <List.Item.Meta
+                                        avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
+                                        title={<a href="https://ant.design">{item.name}</a>}
+                                        description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                    />
+                                    <div>content</div>
+                                </List.Item>
+                            )}
+                        />
                         {/* <Sider width={240} style={{ display: 'flex', flexDirection: 'column' }}>
                             <Spin spinning={this.state.spinloading}>
                                 <h3 className="page-title">杭州市</h3>
@@ -476,7 +520,7 @@ export default class app extends Component {
                                     totalCount={userListResult.totalCount}
                                 />
                             </div> */}
-                            {/* <div className="page-footer">
+                        {/* <div className="page-footer">
                                 <div className="page-footer-buttons">
                                     {
                                         btnRights.add ? <Button type="primary" style={{ marginRight: '10px' }} onClick={() => this.policeAdd()}> 新增人员</Button> : null

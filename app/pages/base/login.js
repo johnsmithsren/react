@@ -159,14 +159,6 @@ export default class Login extends Component {
               }
             </QueuiAnim>
           </div>
-          <QueuiAnim component="div" className="login-footer" delay={600} type="bottom" key="footer">
-            {
-              this.state.show ? [
-                <p key="0"> 浙江七巧板信息科技股份有限公司 </p>,
-              ] : null
-            }
-
-          </QueuiAnim>
         </div>
       </div>
     )
