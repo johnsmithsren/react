@@ -35,3 +35,7 @@ export const synUser = createApi(`${path}/${prefix}/user/synUser`, option) // �
 export const fetchUserSetRole = createApi(`${path}/${prefix}/user/updateRole`, option) // 修改用户角色
 export const fetchUserDelete = createApi(`${path}/${prefix}/user/delete`, option) // 删除用户
 export const fetchChangeUserStatus = createApi(`${path}/${prefix}/user/updateStatus`, option) // 设置用户是否冻结状态
+
+
+//编辑器内容存储
+export const saveEditorContent = createApi(`${path}/${prefix}/user/saveEditorContent`, option) // 设置用户是否冻结状态

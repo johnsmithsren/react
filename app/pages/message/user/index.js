@@ -448,9 +448,6 @@ export default class app extends Component {
             userDetailResult,
             userRoleSetResult,
         } = this.state
-        const { btnRights } = this.state
-        const { getFieldDecorator } = this.props.form
-        const thevalue = this.state.moduletype === 'add' ? '' : userDetailResult
         const { loading, loadingMore, showLoadingMore, data } = this.state;
         const loadMore = showLoadingMore ? (
             <div style={{ textAlign: 'center', marginTop: 12, height: 32, lineHeight: '32px' }}>
@@ -465,6 +462,12 @@ export default class app extends Component {
                         <List
                             className="demo-loadmore-list"
                             loading={loading}
+                            pagination={{
+                                onChange: (page) => {
+                                    console.log(page);
+                                },
+                                pageSize: 8,
+                            }}
                             itemLayout="horizontal"
                             loadMore={loadMore}
                             dataSource={listData}

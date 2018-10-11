@@ -1,27 +1,45 @@
 
 import React, { Component } from 'react'
+
+const _ = require('lodash');
 import { connect } from 'react-redux'
-import { Editor, EditorState, RichUtils } from 'draft-js'
+import { Button } from 'antd'
+import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
 import 'draft-js/dist/Draft.css'
 import '@styles/RichEditor.less'
+import {
+  saveEditorContent,
+} from '@apis/manage'
 
 @connect((state, props) => ({
   config: state.config,
 }))
+
+
 export default class app extends Component {
   constructor(props) {
     super(props);
     this.state = { editorState: EditorState.createEmpty() };
-
     this.focus = () => this.refs.editor.focus();
-    this.onChange = editorState => this.setState({ editorState });
-
+    this.onChange = (editorState) => {
+      this.setState({
+        editorState
+      });
+    }
     this.handleKeyCommand = this._handleKeyCommand.bind(this);
     this.onTab = this._onTab.bind(this);
     this.toggleBlockType = this._toggleBlockType.bind(this);
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
   }
 
+  saveContent() {
+    let currentContent = this.state.editorState.getCurrentContent()
+    let content = convertToRaw(currentContent)
+    let c = _.get(content, 'blocks')
+    saveEditorContent({ content: c }, (res) => {
+      console.log(res.msg)
+    })
+  }
   _handleKeyCommand(command, editorState) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
@@ -86,7 +104,9 @@ export default class app extends Component {
             spellCheck
           />
         </div>
+        <Button onClick={this.saveContent.bind(this)}>保存</Button>
       </div>
+
     );
   }
 }
