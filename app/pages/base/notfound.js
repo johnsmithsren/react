@@ -22,7 +22,6 @@ export default class notfound extends Component {
           width={200}
           status="active"
         />
-
         <div className="link ptbig">
           <p className="mbbig"><Link to="/">跳转至首页</Link></p>
           <p className="mbbig"><Link to="/login">跳转至登陆页</Link></p>

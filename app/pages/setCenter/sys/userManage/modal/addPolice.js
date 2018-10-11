@@ -1,10 +1,3 @@
-/*
- * @Author: duxianwei
- * @Date: 2017-08-10 17:29:00
- * @Last Modified by: duxianwei
- * @Last Modified time: 2018-05-17 20:08:10
- */
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Form, Input, message, Select } from 'antd'
@@ -140,16 +133,16 @@ export default class Index extends Component {
                   })(<Input type="password" placeholder="不改密码此项为空" />)}
                 </FormItem>
               ) : (
-                <FormItem {...formItemLayout} label="登陆密码" hasFeedback>
-                  {getFieldDecorator('password', {
-                    initialValue: values.password || '',
-                    rules: [
-                      { required: true, message: '密码请输入6-16位数字或者字母' },
-                      { pattern: regExpConfig.pwd, message: '密码请输入6-16位数字或者字母' },
-                    ],
-                  })(<Input placeholder="请输入密码" type="password" />)}
-                </FormItem>
-              )
+                  <FormItem {...formItemLayout} label="登陆密码" hasFeedback>
+                    {getFieldDecorator('password', {
+                      initialValue: values.password || '',
+                      rules: [
+                        { required: true, message: '密码请输入6-16位数字或者字母' },
+                        { pattern: regExpConfig.pwd, message: '密码请输入6-16位数字或者字母' },
+                      ],
+                    })(<Input placeholder="请输入密码" type="password" />)}
+                  </FormItem>
+                )
             }
             <FormItem {...formItemLayout} label="手机号码" hasFeedback>
               {getFieldDecorator('phoneNo', {

@@ -54,5 +54,6 @@ export default () => (
     </Route>
     <Route path="/login" component={base.login} />
     <Route path="*" component={base.notfound} />
+    <Route path="/register" component={base.register} />
   </Router>
 )

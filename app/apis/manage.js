@@ -38,4 +38,4 @@ export const fetchChangeUserStatus = createApi(`${path}/${prefix}/user/updateSta
 
 
 //编辑器内容存储
-export const saveEditorContent = createApi(`${path}/${prefix}/user/saveEditorContent`, option) // 设置用户是否冻结状态
+export const saveEditorContent = createApi(`${path}/${prefix}/article/saveEditorContent`, option) // 设置用户是否冻结状态
