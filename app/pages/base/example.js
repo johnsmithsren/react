@@ -1,35 +1,20 @@
-import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-import { } from 'antd'
-// import {connect} from 'react-redux'
-// import {} from '@actions/xxx'
+import React, { Component } from "react";
 
-// @connect((storeState)=>({}))
+import {} from "antd";
 
-export default class app extends Component {
-  static defaultProps={
-  }
+export default class example extends Component {
+  static defaultProps = {};
 
-  static propTypes = {
-  }
+  static propTypes = {};
 
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
 
   componentDidMount() {}
-
-  // region vscode 1.17的收缩代码块功能  业务代码
-
-
-  // endregion
-
+  // 概述页面
   render() {
-    return (
-      <div className="page">
-        示范页面
-      </div>
-    )
+    return <div className="page">临时页面</div>;
   }
 }

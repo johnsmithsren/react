@@ -150,6 +150,9 @@ export const oftenFetchByPost = (api, options) => {
     } else {
       baseConfig.withCredentials = false
     }
+    if (_.isEmpty(options.contentType)) {
+      _.set(baseConfig, 'headers.Content-Type', _.get(options, 'Content-Type'))
+    }
     axios({
       ...baseConfig, ...options, ...config, url: api, data, cancelToken,
     })

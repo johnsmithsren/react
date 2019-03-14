@@ -1,58 +1,80 @@
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 const FormItem = Form.Item;
+import { connect } from 'react-redux'
 const Option = Select.Option;
 import { register } from '@apis/common'
+import { clearGformCache2, login } from '@actions/common'
+const moment = require('moment')
+const forge = require('node-forge');
 const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [{
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [{
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [{
-            value: 'xihu',
-            label: 'West Lake',
-        }],
-    }],
-}, {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [{
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [{
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-        }],
-    }],
-}];
-
+// const residences = [{
+//     value: 'zhejiang',
+//     label: 'Zhejiang',
+//     children: [{
+//         value: 'hangzhou',
+//         label: 'Hangzhou',
+//         children: [{
+//             value: 'xihu',
+//             label: 'West Lake',
+//         }],
+//     }],
+// }, {
+//     value: 'jiangsu',
+//     label: 'Jiangsu',
+//     children: [{
+//         value: 'nanjing',
+//         label: 'Nanjing',
+//         children: [{
+//             value: 'zhonghuamen',
+//             label: 'Zhong Hua Men',
+//         }],
+//     }],
+// }];
+@connect((state, props) => ({
+    config: state.config,
+}))
+@Form.create({})
 
 export default class RegistrationForm extends Component {
-    state = {
-        confirmDirty: false,
-        autoCompleteResult: [],
-    };
-
-
-    // 组件已经加载到dom中
-    componentDidMount() {
-        this.props.form.resetFields()
+    constructor(props) {
+        super(props)
+        this.state = {
+            loading: false,
+            confirmDirty: false,
+            autoCompleteResult: [],
+        }
     }
+    // 组件已经加载到dom中
+    componentWillMount() {
+        this.props.dispatch(clearGformCache2({}))
+    }
+
+    // 表单提交后处理事件
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        this.props.form.validateFieldsAndScroll((err, formParams) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                console.log('表单参数: ', formParams);
             }
             this.setState({ loading: true })
-            this.props.dispatch(register(values, (res) => {
+            let userPassword = _.get(formParams, 'password', '')
+            _.set(formParams, 'createTime', moment().unix())
+            _.set(formParams, 'password', forge.md.md5.create().update(userPassword).digest().toHex())
+            _.set(formParams, 'confirm', forge.md.md5.create().update(userPassword).digest().toHex())
+            this.props.dispatch(register(formParams, (res) => {
+                if (!_.isEmpty(res.error)) {
+                    message.warning(r.msg)
+                }
                 sessionStorage.setItem('token', res.data.token)
                 sessionStorage.setItem('ticket', res.data.ticket)
-            }));
+            }), (r) => {
+                message.warning(r.msg)
+                this.setState({
+                    loading: false,
+                })
+            });
         });
     }
 
@@ -135,9 +157,9 @@ export default class RegistrationForm extends Component {
                 >
                     {getFieldDecorator('email', {
                         rules: [{
-                            type: 'email', message: 'The input is not valid E-mail!',
+                            type: 'email', message: '邮箱不合法!',
                         }, {
-                            required: true, message: 'Please input your E-mail!',
+                            required: true, message: '请输入你的邮箱!',
                         }],
                     })(
                         <Input />
@@ -149,7 +171,7 @@ export default class RegistrationForm extends Component {
                 >
                     {getFieldDecorator('password', {
                         rules: [{
-                            required: true, message: 'Please input your password!',
+                            required: true, message: '请输入你的密码!',
                         }, {
                             validator: this.validateToNextPassword,
                         }],
@@ -163,7 +185,7 @@ export default class RegistrationForm extends Component {
                 >
                     {getFieldDecorator('confirm', {
                         rules: [{
-                            required: true, message: 'Please confirm your password!',
+                            required: true, message: '请确认密码!',
                         }, {
                             validator: this.compareToFirstPassword,
                         }],
@@ -175,15 +197,15 @@ export default class RegistrationForm extends Component {
                     {...formItemLayout}
                     label={(
                         <span>
-                            Nickname&nbsp;
-              <Tooltip title="What do you want others to call you?">
+                            昵称&nbsp;
+                            <Tooltip title="想要怎么称呼你?">
                                 <Icon type="question-circle-o" />
                             </Tooltip>
                         </span>
                     )}
                 >
                     {getFieldDecorator('nickname', {
-                        rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+                        rules: [{ required: true, message: '请输入你的昵称!', whitespace: true }],
                     })(
                         <Input />
                     )}
@@ -204,7 +226,7 @@ export default class RegistrationForm extends Component {
                     label="电话号码"
                 >
                     {getFieldDecorator('phone', {
-                        rules: [{ required: true, message: 'Please input your phone number!' }],
+                        rules: [{ required: true, message: '请输入电话号码!' }],
                     })(
                         <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
                     )}
@@ -228,7 +250,7 @@ export default class RegistrationForm extends Component {
                 <FormItem
                     {...formItemLayout}
                     label="验证码"
-                    extra="We must make sure that your are a human."
+                    extra="防止机器人创建，请谅解."
                 >
                     <Row gutter={8}>
                         <Col span={12}>
